@@ -1,10 +1,11 @@
 import random
 
+from background import Background
 from config import BLACK, COLORS, GRID_HEIGHT, GRID_WIDTH, SHAPES
 
 
 class Block:
-    def __init__(self, background):
+    def __init__(self, background: Background):
         self.shape = random.choice(SHAPES)
         self.color = random.choice(COLORS)
         self.x = GRID_WIDTH // 2 - len(self.shape[0]) // 2
@@ -21,7 +22,7 @@ class Block:
         if not self.is_valid_position():
             self.x -= 1
 
-    def move_down(self):
+    def move_down(self) -> bool:
         self.y += 1
         if not self.is_valid_position():
             self.y -= 1
@@ -38,7 +39,7 @@ class Block:
         if not self.is_valid_position():
             self.shape = old_shape
 
-    def is_valid_position(self):
+    def is_valid_position(self) -> bool:
         for row in range(len(self.shape)):
             for col in range(len(self.shape[row])):
                 if self.shape[row][col] and (

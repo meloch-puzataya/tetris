@@ -20,14 +20,14 @@ from config import (
 
 
 class TetrisGame:
-    def __init__(self, score):
+    def __init__(self, score: int):
         self.background = Background()
         self.current_block = Block(self.background)
         self.window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         self.score = score
         self.speed = SPEED
 
-    def update(self):
+    def update(self) -> bool:
         game_over = self.current_block.move_down()
         self.check_lines(game_over)
         return game_over
@@ -51,7 +51,7 @@ class TetrisGame:
                 elif event.key == pygame.K_UP:
                     self.current_block.rotate()
 
-    def check_lines(self, game_over):
+    def check_lines(self, game_over: bool):
         rows_to_remove = []
         if game_over:
             for i in range(GRID_HEIGHT):
@@ -65,7 +65,7 @@ class TetrisGame:
             del self.background.grid[y]
             self.background.grid.insert(0, [BLACK] * GRID_WIDTH)
 
-    def draw(self, game_over):
+    def draw(self, game_over: bool):
         self.window.fill(BLACK)
         for row in range(GRID_HEIGHT):
             for col in range(GRID_WIDTH):
@@ -101,12 +101,12 @@ class TetrisGame:
         time.sleep(3)
         self.__init__()
 
-    def draw_score(self, x, y):
+    def draw_score(self, x: int, y: int):
         font = pygame.font.Font("ARCADE.ttf", int(BIG_FONT_SIZE / 1.5))
         text = font.render(f"Score: {self.score}", True, WHITE)
         self.window.blit(text, (x, y))
 
-    def draw_game_over(self, x, y):
+    def draw_game_over(self, x: int, y: int):
         font = pygame.font.Font("ARCADE.ttf", int(BIG_FONT_SIZE))
         text = font.render("Game Over", True, RED)
         font2 = pygame.font.Font("ARCADE.ttf", int(SMALL_FONT_SIZE))
