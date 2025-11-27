@@ -1,11 +1,10 @@
 import random
 
-from background import Background
 from config import BLACK, COLORS, GRID_HEIGHT, GRID_WIDTH, SHAPES
 
 
 class Block:
-    def __init__(self, background: Background):
+    def __init__(self, background):
         self.shape = random.choice(SHAPES)
         self.color = random.choice(COLORS)
         self.x = GRID_WIDTH // 2 - len(self.shape[0]) // 2

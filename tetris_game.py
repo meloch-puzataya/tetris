@@ -17,15 +17,17 @@ from config import (
     WINDOW_WIDTH,
     SPEED,
 )
+from score_processor import ScoreProcessor
 
 
 class TetrisGame:
-    def __init__(self, score: int):
+    def __init__(self):
         self.background = Background()
         self.current_block = Block(self.background)
         self.window = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-        self.score = score
+        self.score = 0
         self.speed = SPEED
+        self.best_score = ScoreProcessor().get_score()
 
     def update(self) -> bool:
         game_over = self.current_block.move_down()
@@ -54,13 +56,14 @@ class TetrisGame:
     def check_lines(self, game_over: bool):
         rows_to_remove = []
         if game_over:
-            for i in range(GRID_HEIGHT):
-                rows_to_remove.append(i)
+            rows_to_remove = list(range(GRID_HEIGHT))
         else:
             for y in range(GRID_HEIGHT):
                 if all(color != BLACK for color in self.background.grid[y]):
                     rows_to_remove.append(y)
                     self.score = self.score + 1
+                    if self.score > self.best_score:
+                        ScoreProcessor().save_score(self.score)
         for y in rows_to_remove:
             del self.background.grid[y]
             self.background.grid.insert(0, [BLACK] * GRID_WIDTH)
@@ -96,14 +99,16 @@ class TetrisGame:
     def reset(self):
         self.window.fill(BLACK)
         self.draw_score(int(INDENT), int(WINDOW_HEIGHT / 2))
-        self.draw_game_over(int(INDENT / 2), int(WINDOW_HEIGHT / 4))
+        self.draw_game_over(int(INDENT * 4), int(WINDOW_HEIGHT / 4))
         pygame.display.flip()
         time.sleep(3)
         self.__init__()
 
     def draw_score(self, x: int, y: int):
-        font = pygame.font.Font("ARCADE.ttf", int(BIG_FONT_SIZE / 1.5))
-        text = font.render(f"Score: {self.score}", True, WHITE)
+        font = pygame.font.Font("ARCADE.ttf", int(BIG_FONT_SIZE / 2))
+        text = font.render(
+            f"Score: {self.score}  Best score : {self.best_score}", True, WHITE
+        )
         self.window.blit(text, (x, y))
 
     def draw_game_over(self, x: int, y: int):
