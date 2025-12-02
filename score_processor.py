@@ -4,7 +4,7 @@ from config import SCORE_FILE_PATH
 
 
 class ScoreProcessor:
-    # ensures that class is singleton
+    # ensures that class is a singleton
     def __new__(cls):
         if not hasattr(cls, "instance"):
             cls.instance = super(ScoreProcessor, cls).__new__(cls)
