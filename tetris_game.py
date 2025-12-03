@@ -5,6 +5,7 @@ from block import Block
 from config import (
     BIG_FONT_SIZE,
     BLACK,
+    FONT,
     GRID_HEIGHT,
     GRID_WIDTH,
     INDENT,
@@ -105,16 +106,16 @@ class TetrisGame:
         self.__init__()
 
     def draw_score(self, x: int, y: int):
-        font = pygame.font.Font("ARCADE.ttf", int(BIG_FONT_SIZE / 2))
+        font = pygame.font.Font(FONT, int(BIG_FONT_SIZE / 2))
         text = font.render(
             f"Score: {self.score}  Best score : {self.best_score}", True, WHITE
         )
         self.window.blit(text, (x, y))
 
     def draw_game_over(self, x: int, y: int):
-        font = pygame.font.Font("ARCADE.ttf", int(BIG_FONT_SIZE))
+        font = pygame.font.Font(FONT, int(BIG_FONT_SIZE))
         text = font.render("Game Over", True, RED)
-        font2 = pygame.font.Font("ARCADE.ttf", int(SMALL_FONT_SIZE))
+        font2 = pygame.font.Font(FONT, int(SMALL_FONT_SIZE))
         text2 = font2.render(
             "Press Esc to quit or wait for the game to restart", True, WHITE
         )
