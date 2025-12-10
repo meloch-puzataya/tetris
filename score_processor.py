@@ -17,10 +17,9 @@ class ScoreProcessor:
         if os.path.exists(self.filepath):
             with open(self.filepath, "r") as file:
                 score: str = file.read()
-                return score if score.isdigit() else 0
+                return int(score) if score.isdigit() else 0
         return 0
 
     def save_score(self, score: int) -> None:
         with open(self.filepath, "w") as file:
             file.write(str(score))
-        print(f"Content successfully written to {self.filepath}")

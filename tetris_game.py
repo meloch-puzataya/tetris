@@ -37,6 +37,7 @@ class TetrisGame:
 
     def handle_input(self):
         for event in pygame.event.get():
+            # quit game
             if (
                 event.type == pygame.QUIT
                 or event.type == pygame.KEYDOWN
@@ -44,6 +45,7 @@ class TetrisGame:
             ):
                 pygame.quit()
                 quit()
+            # move block
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_LEFT:
                     self.current_block.move_left()
@@ -57,20 +59,25 @@ class TetrisGame:
     def check_lines(self, game_over: bool):
         rows_to_remove = []
         if game_over:
+            # remove all rows
             rows_to_remove = list(range(GRID_HEIGHT))
         else:
             for y in range(GRID_HEIGHT):
+                # full row
                 if all(color != BLACK for color in self.background.grid[y]):
                     rows_to_remove.append(y)
-                    self.score = self.score + 1
+                    self.score += 1
                     if self.score > self.best_score:
+                        self.best_score = self.score
                         ScoreProcessor().save_score(self.score)
         for y in rows_to_remove:
+            # delete rows and add empty rows on top
             del self.background.grid[y]
             self.background.grid.insert(0, [BLACK] * GRID_WIDTH)
 
     def draw(self, game_over: bool):
         self.window.fill(BLACK)
+        # render background
         for row in range(GRID_HEIGHT):
             for col in range(GRID_WIDTH):
                 pygame.draw.rect(
@@ -78,6 +85,7 @@ class TetrisGame:
                     self.background.grid[row][col],
                     (col * NODE_SIZE, row * NODE_SIZE, NODE_SIZE, NODE_SIZE),
                 )
+        # render current block
         for row in range(len(self.current_block.shape)):
             for col in range(len(self.current_block.shape[row])):
                 if self.current_block.shape[row][col]:
@@ -113,14 +121,16 @@ class TetrisGame:
         self.window.blit(text, (x, y))
 
     def draw_game_over(self, x: int, y: int):
-        font = pygame.font.Font(FONT, int(BIG_FONT_SIZE))
-        text = font.render("Game Over", True, RED)
-        font2 = pygame.font.Font(FONT, int(SMALL_FONT_SIZE))
-        text2 = font2.render(
+        game_over_font = pygame.font.Font(FONT, int(BIG_FONT_SIZE))
+        game_over_text = game_over_font.render("Game Over", True, RED)
+        notification_font = pygame.font.Font(FONT, int(SMALL_FONT_SIZE))
+        notification_text = notification_font.render(
             "Press Esc to quit or wait for the game to restart", True, WHITE
         )
-        self.window.blit(text, (x, y))
-        self.window.blit(text2, (SMALL_FONT_SIZE, WINDOW_HEIGHT - SMALL_FONT_SIZE))
+        self.window.blit(game_over_text, (x, y))
+        self.window.blit(
+            notification_text, (SMALL_FONT_SIZE, WINDOW_HEIGHT - SMALL_FONT_SIZE)
+        )
 
     def run(self):
         clock = pygame.time.Clock()
