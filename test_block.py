@@ -1,4 +1,4 @@
-import pytest
+import pytests
 from block import Block
 from background import Background
 from config import GRID_HEIGHT, GRID_WIDTH, RED

@@ -1,4 +1,3 @@
-import os
 import pygame
 
 from tetris_game import TetrisGame

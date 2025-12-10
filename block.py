@@ -26,14 +26,19 @@ class Block:
         if not self.is_valid_position():
             self.y -= 1
             if self.y <= 0:
+                # canvas is filled game over
                 return True
             else:
+                # lock block in the background
                 self.background.lock_block(self)
+                # reset to new block
                 self.__init__(self.background)
+        # successful move down
         return False
 
     def rotate(self):
         old_shape = self.shape
+        # rotate shape clockwise
         self.shape = list(zip(*reversed(self.shape)))
         if not self.is_valid_position():
             self.shape = old_shape
