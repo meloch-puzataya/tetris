@@ -45,7 +45,7 @@ def test_get_score_from_valid_file(temp_score_file):
         f.write("150")
 
     score = processor.get_score()
-    assert score == "150"
+    assert score == 150
 
 
 def test_get_score_invalid_content_not_digit(temp_score_file):
